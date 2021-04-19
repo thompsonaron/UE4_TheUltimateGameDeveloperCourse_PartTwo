@@ -5,6 +5,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Engine/World.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMain::AMain()
@@ -18,6 +20,9 @@ AMain::AMain()
 	CameraBoom->TargetArmLength = 600.f; // Camera follows at this distance
 	CameraBoom->bUsePawnControlRotation = true; // Rotate arm based on controller
 
+	// Init size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(34.f, 110.f);
+
 	// Create Follow Camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // FollowCamera (Camera) attaches to CameraBoom (SpringArm)
@@ -27,6 +32,18 @@ AMain::AMain()
 	// Set our turn rates for input
 	BaseTurnRate = 65.f;
 	BaseLookUpRate = 65.f;
+
+	// default character controller control - don't rotate the camera when the controller rotates
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input... - znaci da se lik rotira u smjeru gdje se krece
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); //... at this rotation rate - znaci kojom se brzinom zarotira u taj smijer
+	GetCharacterMovement()->JumpZVelocity = 650.f;
+	// how much can the character move in the air (from 0 to 1)
+	GetCharacterMovement()->AirControl = 0.2f;
 }
 
 // Called when the game starts or when spawned
