@@ -44,6 +44,12 @@ AMain::AMain()
 	GetCharacterMovement()->JumpZVelocity = 650.f;
 	// how much can the character move in the air (from 0 to 1)
 	GetCharacterMovement()->AirControl = 0.2f;
+
+	MaxHealth = 100.f;
+	Health = 65.f;
+	MaxStamina = 350.f;
+	Stamina = 120.f;
+	Coins = 0.f;
 }
 
 // Called when the game starts or when spawned
